@@ -6,7 +6,7 @@ module Customizable
     define_singleton_method 'search_by' do |opts|
       joins(:custom_attributes)
         .where(company: opts[:company])
-        .where('custom_attributes.field_name = ? and custom_attributes.field_value = ?', opts[:attribute], opts[:field_value])
+        .where('custom_attributes.field_name = ? and custom_attributes.field_value = ?', opts[:field_name], opts[:field_value])
     end
 
     define_method 'configure_attribute' do |attribute, new_value|
@@ -18,5 +18,9 @@ module Customizable
 
   def attribute_registered?(attribute)
     raise Company::AttributeNotRegisted unless company.custom_data.include?(attribute)
+  end
+
+  def formatted_custom_attributes
+    custom_attributes.each_with_object({}) { |att, hash| hash[att.field_name] = att.field_value; }
   end
 end
