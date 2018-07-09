@@ -5,3 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+company = Company.create(name: 'Company #1', custom_data: ['shoe_size' ,'laces'])
+User.create(email: 'test@user.com', company: company)
