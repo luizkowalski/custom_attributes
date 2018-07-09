@@ -46,9 +46,44 @@ RSpec.describe User, type: :model do
   end
 
   context 'when companies have the same custom_data' do
-    let(:companya) { create(:company, custom_data: ['custom']) }
-    let(:companyb) { create(:company, custom_data: ['custom']) }
+    let(:company_a) { create(:company, custom_data: ['custom']) }
+    let(:company_b) { create(:company, custom_data: ['custom']) }
 
-    let(:user) { create(:user, company: company) }
+    let!(:user_a) { create(:user, company: company_a) }
+    let!(:user_b) { create(:user, company: company_b) }
+
+    let(:user_a_custom_attribute) { 'user_a_custom' }
+    let(:user_b_custom_attribute) { 'user_b_custom' }
+
+    before do
+      user_a.configure_attribute('custom', user_a_custom_attribute)
+      user_b.configure_attribute('custom', user_b_custom_attribute)
+    end
+
+    context 'and company_a searches for their user' do
+      subject do
+        User.search_by company: company_a, field_name: 'custom', field_value: user_a_custom_attribute
+      end
+      it 'returns a user' do
+        expect(subject).not_to be_empty
+      end
+
+      it 'does not include user_b' do
+        expect(subject).not_to include(user_b)
+      end
+    end
+
+    context 'and company_b searches for their user' do
+      subject do
+        User.search_by company: company_b, field_name: 'custom', field_value: user_b_custom_attribute
+      end
+      it 'returns a user' do
+        expect(subject).not_to be_empty
+      end
+
+      it 'does not include user_a' do
+        expect(subject).not_to include(user_a)
+      end
+    end
   end
 end
