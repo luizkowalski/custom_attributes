@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20180709210217) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_custom_attributes_on_company_id"
-    t.index ["user_id", "company_id", "field_name"], name: "index_on_custom_attributes"
+    t.index ["user_id", "company_id", "field_name"], name: "index_on_custom_attributes", unique: true
     t.index ["user_id"], name: "index_custom_attributes_on_user_id"
   end
 
